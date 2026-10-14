@@ -21,6 +21,10 @@ MTR-34 написан под внутренности MTR 3 (`mtr.data.RailwayDa
 |---|---|
 | `sowcer` (батчинг, instancing, VAO/InstanceBuf) | **Уже есть** в MTR 4 (`OptimizedRenderer`, `QueuedRenderLayer`, батчи по `Identifier`) |
 | Occlusion/дальность отрисовки рельсов (`RailDistanceRenderer`, `RenderTrainsMixin`) | **Перенесено** как `maxRailRenderDistanceBlocks` |
+| Снижение нагрузки при работе с рельсами (идея MTR-34: не делать лишних проверок мира каждый кадр) | **Новое для MTR 4**: `nodeCheckRadiusBlocks` (в MTR 4 куб 33x33x33 блоков проверяется каждый кадр) |
+| Кэш генерируемых текстур (идея MTR-34: контроль памяти динамических ресурсов) | **Новое для MTR 4**: `dynamicTextureLifetimeMillis` |
+| «Запоминание» поезда: не пересобирать модель при каждом возвращении в поле зрения (в MTR-34 это делал слой `sowcer`/`DynamicTrainModelLoader`; назначение определено по названиям классов, без декомпиляции) | **Перенесено** как `vehicleModelCacheMillis`: в MTR 4 модели уже собираются в оптимизированные буферы, но через 60 с без обращений кэш `CachedResource` сбрасывается; аддон продлевает срок жизни |
+| Меньше сетевого трафика для табло | **Новое для MTR 4**: `arrivalsRefreshMillis` |
 | Асинхронная работа с видимостью | **Уже есть** (`WorkerThread` с occlusion culling); добавлены настройки радиуса и паузы |
 | `DynamicTrainModelLoader`, `ModelBakeryMixin`, `TrainModelCapture` | Не применимо: модели поездов в MTR 4 грузятся через `CustomResourceLoader`/`VehicleResource` |
 | `BetterPathFinder` (`PathFinderMixin`) | **Не перенесено**: поиск пути MTR 4 находится в `Transport-Simulation-Core` (в zip только jar без исходников) |

@@ -1,5 +1,6 @@
 package dev.mtropt.mixin;
 
+import dev.mtropt.HookStatus;
 import dev.mtropt.OptConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -22,6 +23,7 @@ public abstract class WorkerThreadMixin {
 			require = 0
 	)
 	private int mtropt$occlusionRadiusChunks(int original) {
+		HookStatus.mark("WorkerThread.updateInstance (occlusion radius)");
 		final int cap = OptConfig.get().maxOcclusionRadiusChunks;
 		return cap > 0 ? Math.min(original, cap) : original;
 	}
@@ -33,6 +35,7 @@ public abstract class WorkerThreadMixin {
 			require = 0
 	)
 	private long mtropt$workerSleepMillis(long original) {
+		HookStatus.mark("WorkerThread.runTick (sleep)");
 		final int sleep = OptConfig.get().workerThreadSleepMillis;
 		return sleep > 0 ? sleep : original;
 	}

@@ -4,6 +4,9 @@
 	"package": "dev.mtropt.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
+		"ArrivalsCacheClientMixin",
+		"CachedResourceMixin",
+		"DynamicTextureCacheMixin",
 		"RenderRailsMixin",
 		"WorkerThreadMixin"
 	],
