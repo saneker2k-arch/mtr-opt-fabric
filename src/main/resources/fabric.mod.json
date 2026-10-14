@@ -1,0 +1,21 @@
+{
+	"schemaVersion": 1,
+	"id": "mtr_opt",
+	"version": "${version}",
+	"name": "MTR Optimization Addon",
+	"description": "Client-side performance tweaks for Minecraft Transit Railway 4, inspired by the optimizations in MTR-34.",
+	"authors": [ "mtr-opt contributors" ],
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": [ "dev.mtropt.MtrOptClient" ]
+	},
+	"mixins": [ "mtr_opt.mixins.json" ],
+	"depends": {
+		"fabricloader": ">=0.14.0",
+		"fabric-api": "*",
+		"minecraft": "1.19.4",
+		"java": ">=17",
+		"mtr": ">=4.0.5"
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"required": false,
+	"minVersion": "0.8",
+	"package": "dev.mtropt.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"client": [
+		"RenderRailsMixin",
+		"WorkerThreadMixin"
+	],
+	"injectors": {
+		"defaultRequire": 0
+	}
+}

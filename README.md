@@ -1,0 +1,39 @@
+# MTR Optimization Addon (Fabric 1.19.4)
+
+Клиентский аддон для **Minecraft Transit Railway 4.0.5** (Minecraft 1.19.4, Fabric).
+Переносит в MTR 4 те идеи оптимизации из мода MTR-34, которые имеют смысл в архитектуре MTR 4.
+
+## Что делает
+
+| Параметр (`config/mtr_opt.json`) | По умолчанию | Что меняет в MTR 4 |
+|---|---|---|
+| `maxRailRenderDistanceBlocks` | 192 | Потолок дальности отрисовки рельсов (`RenderRails.renderWithinRenderDistance`). 0 = как в MTR |
+| `maxOcclusionRadiusChunks` | 16 | Радиус occlusion culling в рабочем потоке (в MTR зашито 32). 0 = как в MTR |
+| `workerThreadSleepMillis` | 0 | Пауза рабочего потока culling (в MTR зашито 10 мс). 0 = как в MTR |
+
+Конфиг создаётся при первом запуске клиента.
+
+## Сборка
+
+Нужен JDK 17.
+
+```
+./gradlew build
+```
+
+Готовый jar: `build/libs/mtr-opt-<версия>+mc1.19.4.jar`.
+Кладётся в `mods/` вместе с Fabric API и MTR 4.0.5 для 1.19.4.
+
+## GitHub
+
+1. Создайте репозиторий и запушьте папку целиком.
+2. Workflow `.github/workflows/build.yml` соберёт мод на каждый push и приложит jar как artifact.
+3. Тег `v1.0.0` (`git tag v1.0.0 && git push --tags`) создаёт GitHub Release с jar.
+
+## Важно
+
+MTR как зависимость компиляции **не подключается**: миксины нацелены на классы MTR по строковому
+имени (`@Pseudo`) и с `require = 0`. Если в вашей сборке MTR метод или константа отличаются,
+конкретный миксин просто не применится, игра не упадёт (смотрите лог `mtr_opt`).
+
+Подробности и список того, что не переносится и почему: [docs/PORTING_REPORT.md](docs/PORTING_REPORT.md).

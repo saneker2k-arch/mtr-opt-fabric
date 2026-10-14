@@ -1,0 +1,60 @@
+package dev.mtropt;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.fabricmc.loader.api.FabricLoader;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+/**
+ * Простой JSON-конфиг: config/mtr_opt.json. Создаётся при первом запуске.
+ * Значение 0 (или меньше) у числовых параметров означает «не менять поведение MTR».
+ */
+public final class OptConfig {
+
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	private static OptConfig instance;
+
+	/** Максимальная дальность отрисовки рельсов в блоках. 0 = как в MTR (дальность прорисовки игры). */
+	public int maxRailRenderDistanceBlocks = 192;
+
+	/** Максимальный радиус occlusion culling в чанках. В MTR 4 жёстко 32. 0 = не менять. */
+	public int maxOcclusionRadiusChunks = 16;
+
+	/** Пауза рабочего потока culling в миллисекундах. В MTR 4 жёстко 10. 0 = не менять. */
+	public int workerThreadSleepMillis = 0;
+
+	private OptConfig() {
+	}
+
+	public static synchronized OptConfig get() {
+		if (instance == null) {
+			instance = load();
+		}
+		return instance;
+	}
+
+	private static OptConfig load() {
+		final Path path = FabricLoader.getInstance().getConfigDir().resolve("mtr_opt.json");
+		OptConfig config = null;
+		try {
+			if (Files.exists(path)) {
+				config = GSON.fromJson(Files.readString(path, StandardCharsets.UTF_8), OptConfig.class);
+			}
+		} catch (Exception e) {
+			MtrOptClient.LOGGER.warn("Не удалось прочитать {}, используются значения по умолчанию", path, e);
+		}
+		if (config == null) {
+			config = new OptConfig();
+		}
+		try {
+			Files.writeString(path, GSON.toJson(config), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			MtrOptClient.LOGGER.warn("Не удалось записать {}", path, e);
+		}
+		return config;
+	}
+}
