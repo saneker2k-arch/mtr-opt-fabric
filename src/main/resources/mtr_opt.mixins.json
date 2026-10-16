@@ -7,6 +7,9 @@
 		"ArrivalsCacheClientMixin",
 		"CachedResourceMixin",
 		"DynamicTextureCacheMixin",
+		"RenderLiftPanelMixin",
+		"RenderPIDSMixin",
+		"RenderPSDAPGDoorMixin",
 		"RenderRailsMixin",
 		"WorkerThreadMixin"
 	],

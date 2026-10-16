@@ -24,6 +24,8 @@ MTR-34 написан под внутренности MTR 3 (`mtr.data.RailwayDa
 | Снижение нагрузки при работе с рельсами (идея MTR-34: не делать лишних проверок мира каждый кадр) | **Новое для MTR 4**: `nodeCheckRadiusBlocks` (в MTR 4 куб 33x33x33 блоков проверяется каждый кадр) |
 | Кэш генерируемых текстур (идея MTR-34: контроль памяти динамических ресурсов) | **Новое для MTR 4**: `dynamicTextureLifetimeMillis` |
 | «Запоминание» поезда: не пересобирать модель при каждом возвращении в поле зрения (в MTR-34 это делал слой `sowcer`/`DynamicTrainModelLoader`; назначение определено по названиям классов, без декомпиляции) | **Перенесено** как `vehicleModelCacheMillis`: в MTR 4 модели уже собираются в оптимизированные буферы, но через 60 с без обращений кэш `CachedResource` сбрасывается; аддон продлевает срок жизни |
+| Меньше мусора и микрофризов (идея MTR-34: не создавать лишние объекты в рендере каждый кадр; точный механизм в MTR-34 не проверялся) | **Новое для MTR 4**: `fastStringFormat` (12 методов `DynamicTextureCache`, `RenderPSDAPGDoor.render`, `RenderPIDS.render`, `RenderLiftPanel.renderLiftDisplay`) |
+| Экономия RAM на текстах ресурсов | **Новое для MTR 4**: `resourceTextCacheMaxEntries` (через рефлексию и клиентский тик, по умолчанию выключено) |
 | Меньше сетевого трафика для табло | **Новое для MTR 4**: `arrivalsRefreshMillis` |
 | Асинхронная работа с видимостью | **Уже есть** (`WorkerThread` с occlusion culling); добавлены настройки радиуса и паузы |
 | `DynamicTrainModelLoader`, `ModelBakeryMixin`, `TrainModelCapture` | Не применимо: модели поездов в MTR 4 грузятся через `CustomResourceLoader`/`VehicleResource` |
@@ -31,6 +33,13 @@ MTR-34 написан под внутренности MTR 3 (`mtr.data.RailwayDa
 | `RailwayData*Mixin`, `UpdateNearbyMovingObjectsMixin`, `SidingMixin`, `TrainServerMixin`, `LiftServerMixin`, `RailwayDataCooldownModuleMixin` | Не применимо: серверные классы MTR 3 в MTR 4 отсутствуют |
 | `RailMixin`, `RailAngleMixin`, `RailTypeMixin`, `BezierCurve`, `RailCalculator` | Не применимо: в MTR 4 математика рельсов в `railMath` ядра |
 | Скриптинг (GraalJS/Truffle), EyeCandy, кастомные модели рельсов, GUI | Это функции, а не оптимизации; не переносились |
+
+## Найденные слабые места MTR 4, которые аддон пока не исправляет
+
+1. `DynamicTextureCache.getResource` в начале каждого вызова обрабатывает всю очередь готовых текстур (`resourceRegistryQueue.process`) в главном потоке: если текстур готово много сразу (вход на крупную станцию), возможен скачок кадра. Тип `MessageQueue` лежит в ядре без исходников, безопасного хука нет.
+2. `RenderRails.renderWithinRenderDistance` создаёт несколько `Vector3d` на каждый сегмент рельса каждый кадр; внутренний интерфейс `RenderRailWithBlockPos` приватный, переписать метод миксином нельзя.
+3. `RenderVehicles` на каждом кадре собирает список дверных проёмов через stream; цель внутри лямбды, имя которой меняется между сборками.
+4. Ограничение «одна пересборка модели за тик» (`CachedResource.canFetchCache`) вызывает постепенное появление вагонов; ослаблять его опасно (фризы), поэтому лучше реже сбрасывать кэш (`vehicleModelCacheMillis`).
 
 ## Идеи для следующих итераций (требуют исходников ядра или тестов в игре)
 

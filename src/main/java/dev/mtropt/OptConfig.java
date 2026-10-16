@@ -42,6 +42,15 @@ public final class OptConfig {
 	 */
 	public int vehicleModelCacheMillis = 300000;
 
+	/** Быстрая замена String.format (только %s) в местах, где MTR 4 собирает строки каждый кадр: меньше мусора, меньше микрофризов. */
+	public boolean fastStringFormat = true;
+
+	/**
+	 * Максимум записей в текстовом кэше ресурсов MTR (json моделей и свойств). Лишние удаляются каждые ~10 секунд.
+	 * 0 = не трогать (по умолчанию). Для слабых ПК можно поставить 256-512.
+	 */
+	public int resourceTextCacheMaxEntries = 0;
+
 	/** Период запроса прибытия поездов у сервера для табло, мс. В MTR 4 жёстко 3000. 0 = не менять. */
 	public int arrivalsRefreshMillis = 0;
 
