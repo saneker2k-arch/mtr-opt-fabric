@@ -19,10 +19,10 @@ public final class OptConfig {
 	private static OptConfig instance;
 
 	/** Максимальная дальность отрисовки рельсов в блоках. 0 = как в MTR (дальность прорисовки игры). */
-	public int maxRailRenderDistanceBlocks = 192;
+	public int maxRailRenderDistanceBlocks = 128;
 
 	/** Максимальный радиус occlusion culling в чанках. В MTR 4 жёстко 32. 0 = не менять. */
-	public int maxOcclusionRadiusChunks = 16;
+	public int maxOcclusionRadiusChunks = 12;
 
 	/** Пауза рабочего потока culling в миллисекундах. В MTR 4 жёстко 10. 0 = не менять. */
 	public int workerThreadSleepMillis = 0;
@@ -31,16 +31,16 @@ public final class OptConfig {
 	 * Радиус проверки «висящих» узлов рельсов, когда в руке предмет для рельсов/сигналов.
 	 * В MTR 4 жёстко 16, то есть 33x33x33 = 35937 вызовов getBlockState каждый кадр. 0 = не менять.
 	 */
-	public int nodeCheckRadiusBlocks = 8;
+	public int nodeCheckRadiusBlocks = 6;
 
 	/** Время жизни динамических текстур (названия станций, знаки, PIDS) без запросов, мс. В MTR 4 жёстко 10000. 0 = не менять. */
-	public int dynamicTextureLifetimeMillis = 0;
+	public int dynamicTextureLifetimeMillis = 5000;
 
 	/**
 	 * Минимальное время хранения собранных моделей поездов/объектов/рельсов в кэше, мс.
 	 * В MTR 4 модель, к которой не обращались 60000 мс, сбрасывается и потом собирается заново. 0 = не менять.
 	 */
-	public int vehicleModelCacheMillis = 300000;
+	public int vehicleModelCacheMillis = 0;
 
 	/** Быстрая замена String.format (только %s) в местах, где MTR 4 собирает строки каждый кадр: меньше мусора, меньше микрофризов. */
 	public boolean fastStringFormat = true;
@@ -49,7 +49,7 @@ public final class OptConfig {
 	 * Максимум записей в текстовом кэше ресурсов MTR (json моделей и свойств). Лишние удаляются каждые ~10 секунд.
 	 * 0 = не трогать (по умолчанию). Для слабых ПК можно поставить 256-512.
 	 */
-	public int resourceTextCacheMaxEntries = 0;
+	public int resourceTextCacheMaxEntries = 256;
 
 	/** Период запроса прибытия поездов у сервера для табло, мс. В MTR 4 жёстко 3000. 0 = не менять. */
 	public int arrivalsRefreshMillis = 0;
