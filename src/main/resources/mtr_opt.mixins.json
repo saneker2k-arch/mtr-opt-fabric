@@ -6,11 +6,13 @@
 	"client": [
 		"ArrivalsCacheClientMixin",
 		"CachedResourceMixin",
+		"CustomResourceLoaderMixin",
 		"DynamicTextureCacheMixin",
 		"RenderLiftPanelMixin",
 		"RenderPIDSMixin",
 		"RenderPSDAPGDoorMixin",
 		"RenderRailsMixin",
+		"VertexArrayMixin",
 		"WorkerThreadMixin"
 	],
 	"injectors": {

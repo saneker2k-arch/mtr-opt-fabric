@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
- * DynamicTextureCache.COOLDOWN_TIME = 10000 мс: текстура, которую не запрашивали это время, выгружается,
+ * DynamicTextureCache.COOLDOWN_TIME = 10000 мс (в байт-коде это long-константа, а не int; поэтому раньше хук не срабатывал): текстура, которую не запрашивали это время, выгружается,
  * а удалённая уничтожается через такой же интервал. Параметр позволяет подобрать баланс память/перерисовка.
  * Меняются обе точки: продление срока жизни в getResource и задержка уничтожения в tick.
  */
@@ -20,12 +20,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class DynamicTextureCacheMixin {
 
 	@ModifyConstant(
-			method = {"getResource", "tick"},
-			constant = @Constant(intValue = 10000),
+			method = {"getResource", "lambda$getResource$19", "lambda$tick$1"},
+			constant = @Constant(longValue = 10000L),
 			remap = false,
 			require = 0
 	)
-	private int mtropt$textureLifetime(int original) {
+	private long mtropt$textureLifetime(long original) {
 		HookStatus.mark("DynamicTextureCache (texture lifetime)");
 		final int lifetime = OptConfig.get().dynamicTextureLifetimeMillis;
 		return lifetime > 0 ? lifetime : original;

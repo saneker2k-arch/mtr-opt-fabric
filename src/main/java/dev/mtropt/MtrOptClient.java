@@ -13,8 +13,9 @@ public class MtrOptClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		final OptConfig c = OptConfig.get();
 		ResourceCacheTrimmer.init();
-		LOGGER.info("MTR Optimization Addon: railDistance={} blocks, occlusionRadius={} chunks, workerSleep={} ms, nodeCheckRadius={} blocks, textureLifetime={} ms, arrivalsRefresh={} ms, modelCache={} ms, fastFormat={}, textCacheMax={}",
+		LOGGER.info("MTR Optimization Addon: railDistance={} blocks, occlusionRadius={} chunks, workerSleep={} ms, nodeCheckRadius={} blocks, textureLifetime={} ms, arrivalsRefresh={} ms, modelCache={} ms, fastFormat={}, textCacheMax={}, fixLeaks={}, releaseGpu={}, buildBudget={} ms, prewarm={}",
 				c.maxRailRenderDistanceBlocks, c.maxOcclusionRadiusChunks, c.workerThreadSleepMillis,
-				c.nodeCheckRadiusBlocks, c.dynamicTextureLifetimeMillis, c.arrivalsRefreshMillis, c.vehicleModelCacheMillis, c.fastStringFormat, c.resourceTextCacheMaxEntries);
+				c.nodeCheckRadiusBlocks, c.dynamicTextureLifetimeMillis, c.arrivalsRefreshMillis, c.vehicleModelCacheMillis, c.fastStringFormat, c.resourceTextCacheMaxEntries,
+				c.fixResourceLeaks, c.releaseGpuBuffers, c.modelBuildBudgetMillis, c.prewarmVehicles);
 	}
 }
